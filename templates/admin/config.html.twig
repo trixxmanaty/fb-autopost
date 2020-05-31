@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+    <div class="container">
+        <div class="m-3">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show">
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="col-lg-12">
+            <p class="text-danger">Important: When using the terms from Google Sheets the FIRST ROW will be ignored, since it's considered a header!</p>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="form-group row">
+            <label for="googleSheetsReference" class="col-sm-3 col-form-label">{{ form_label(form.googleSheetsReference, 'Google Sheets Link') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.googleSheetsReference) }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="googleSheetsSheetName" class="col-sm-3 col-form-label">{{ form_label(form.googleSheetsSheetName, 'Google Sheets Name') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.googleSheetsSheetName) }}
+                <small id="emailHelp" class="form-text text-muted"><a href="#" data-toggle="modal" data-target="#google_sheets_name">Click me to see image!</a></small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="googleSheetsApiKey" class="col-sm-3 col-form-label">{{ form_label(form.googleSheetsApiKey, 'Google Sheets API Key') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.googleSheetsApiKey) }}
+                <small id="emailHelp" class="form-text text-muted">You can create or get a Google API Key from <a href="https://console.developers.google.com/apis/credentials" target="_blank">here</a></small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="facebookAppId" class="col-sm-3 col-form-label">{{ form_label(form.facebookAppId, 'Facebook APP ID') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.facebookAppId) }}
+                <small id="emailHelp" class="form-text text-muted">You can get your Facebook App Id from <a href="https://developers.facebook.com/apps/" target="_blank">here</a></small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="facebookSecret" class="col-sm-3 col-form-label">{{ form_label(form.facebookSecret, 'Facebook Secret') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.facebookSecret) }}
+                <small id="emailHelp" class="form-text text-muted">You can get your Facebook Secret <a href="https://developers.facebook.com/apps/" target="_blank">here</a></small>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="facebookPageId" class="col-sm-3 col-form-label">{{ form_label(form.facebookPageId, 'Facebook Page ID') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.facebookPageId) }}
+                <small id="emailHelp" class="form-text text-muted"><a href="#" data-toggle="modal" data-target="#facebook_page_id">Click me to see image!</a></small>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="facebookLongLivedAccessToken" class="col-sm-3 col-form-label">{{ form_label(form.facebookLongLivedAccessToken, 'Facebook Long Lived User Access Token') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.facebookLongLivedAccessToken) }}
+                <small id="emailHelp" class="form-text text-muted">You can learn how to create a long lived access token <a href="https://www.sociablekit.com/get-facebook-long-lived-user-access-token/">here</a></small>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="facebookLongLivedAccessToken" class="col-sm-3 col-form-label">{{ form_label(form.facebookPageToken, 'Facebook Long Lived Page Access Token') }}</label>
+            <div class="col-sm-9">
+                {{ form_widget(form.facebookPageToken) }}
+                <small id="emailHelp" class="form-text text-muted">You can learn how to create a long lived access token <a href="https://www.sociablekit.com/get-facebook-long-lived-user-access-token/">here</a></small>
+            </div>
+
+            <div class="offset-3 col-lg-8">
+                {% if hasShortLivedToken == true %}
+                        <a href="{{ path('admin_generate_fb_long_token') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Generate Facebook Long Lived Page Access Token</a>
+                {% else %}
+                    <p>Save a <strong>Facebook Long Lived User Access Token</strong> then refresh the page and a button will appear to generate a <strong>Facebook Long Lived Page Access Token</strong></p>
+                {% endif %}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="modal fade" id="google_sheets_link" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img class="img-resposive" src="{{ asset('img/google_sheets_link.jpg') }}" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="google_sheets_name" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img class="img-resposive" src="{{ asset('img/google_sheets_name.jpg') }}" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="facebook_page_id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img class="img-resposive" src="{{ asset('img/facebook_page_id.jpg') }}" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
