@@ -8,6 +8,7 @@ use App\Repository\ConfigRepository;
 use App\Repository\SearchTermsRepository;
 use App\Service\SimpleCurlService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,18 +24,22 @@ class ScrapeCommand extends Command
     private $entityManager;
     private $searchTermsRepository;
     private $simpleCurlService;
+    private $logger;
 
-    public function __construct(ConfigRepository $configRepository, SearchTermsRepository $searchTermsRepository, EntityManagerInterface $entityManager, SimpleCurlService $simpleCurlService)
+    public function __construct(ConfigRepository $configRepository, SearchTermsRepository $searchTermsRepository, EntityManagerInterface $entityManager, SimpleCurlService $simpleCurlService, LoggerInterface $logger)
     {
         $this->configRepository = $configRepository;
         $this->simpleCurlService = $simpleCurlService;
         $this->searchTermsRepository = $searchTermsRepository;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->logger->info(sprintf('Started facebook post at time %s', (new \DateTime('now'))->format('Y-m-d H:i:s')));
+
         $config = $this->configRepository->findAll();
         if (empty($config)) {
             throw new \Exception('Unable to find required value');
